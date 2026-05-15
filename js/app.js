@@ -13,6 +13,8 @@ const COURSE_DATA = [
 let state = {
     players: [], // { name, shcp }
     scores: {},  // name -> [score_h1, ..., score_h9]
+    putts: {},   // name -> [putts_h1, ..., putts_h9]
+    fir: {},     // name -> [fir_h1, ..., fir_h9]
     shots: {},   // hole -> [ {lat, lng, timestamp} ]
     currentHole: 1,
     date: null
@@ -312,6 +314,8 @@ function addPlayer() {
     if (name && !isNaN(shcp)) {
         state.players.push({ name, shcp });
         state.scores[name] = Array(9).fill(0); // 0 means not played
+        state.putts[name] = Array(9).fill(0);
+        state.fir[name] = Array(9).fill(false);
         
         inputPlayerName.value = '';
         inputPlayerShcp.value = '';
@@ -325,6 +329,8 @@ window.removePlayer = function(index) {
     const name = state.players[index].name;
     state.players.splice(index, 1);
     delete state.scores[name];
+    delete state.putts[name];
+    delete state.fir[name];
     renderStartView();
 };
 
@@ -338,6 +344,14 @@ function startRound() {
     state.players.forEach(p => {
         if (!state.scores[p.name]) {
             state.scores[p.name] = Array(9).fill(0);
+        }
+        if (!state.putts) state.putts = {};
+        if (!state.putts[p.name]) {
+            state.putts[p.name] = Array(9).fill(0);
+        }
+        if (!state.fir) state.fir = {};
+        if (!state.fir[p.name]) {
+            state.fir[p.name] = Array(9).fill(false);
         }
     });
     
@@ -386,6 +400,20 @@ function renderHoleView() {
         
         const points = calculatePoints(p, holeIndex, score);
         
+        const isPar3 = holeData.par === 3;
+        const firChecked = state.fir[p.name][holeIndex] ? 'checked' : '';
+        const putts = state.putts[p.name][holeIndex] || 0;
+        
+        let firHtml = '';
+        if (!isPar3) {
+            firHtml = `
+                <label class="stat-checkbox">
+                    <input type="checkbox" onchange="toggleFIR('${p.name}', this.checked)" ${firChecked}>
+                    Fairwayträff
+                </label>
+            `;
+        }
+        
         const li = document.createElement('li');
         li.innerHTML = `
             <div class="scoring-player-header">
@@ -400,6 +428,15 @@ function renderHoleView() {
                 <button class="score-btn" onclick="updateScore('${p.name}', 1)">
                     <span class="material-symbols-rounded">add</span>
                 </button>
+            </div>
+            <div class="scoring-stats">
+                ${firHtml}
+                <div class="putts-control">
+                    <span class="stat-label">Puttar:</span>
+                    <button class="stat-btn" onclick="updatePutts('${p.name}', -1)">-</button>
+                    <span class="stat-value">${putts}</span>
+                    <button class="stat-btn" onclick="updatePutts('${p.name}', 1)">+</button>
+                </div>
             </div>
         `;
         scoringPlayersList.appendChild(li);
@@ -419,6 +456,25 @@ window.updateScore = function(playerName, delta) {
     
     state.scores[playerName][holeIndex] = score;
     renderHoleView();
+};
+
+window.updatePutts = function(playerName, delta) {
+    const holeIndex = state.currentHole - 1;
+    let p = state.putts[playerName][holeIndex] || 0;
+    
+    p += delta;
+    if (p < 0) p = 0;
+    if (p > 10) p = 10;
+    
+    state.putts[playerName][holeIndex] = p;
+    saveState();
+    renderHoleView();
+};
+
+window.toggleFIR = function(playerName, isHit) {
+    const holeIndex = state.currentHole - 1;
+    state.fir[playerName][holeIndex] = isHit;
+    saveState();
 };
 
 function calculatePoints(player, holeIndex, score) {
@@ -508,6 +564,8 @@ function resetState() {
     state = {
         players: [],
         scores: {},
+        putts: {},
+        fir: {},
         shots: {},
         currentHole: 1,
         date: null
@@ -539,6 +597,9 @@ async function renderHistory() {
             round.players.forEach(p => {
                 let totalScore = 0;
                 let totalPoints = 0;
+                let totalPutts = 0;
+                let firHits = 0;
+                let firPossible = 0;
                 
                 for (let i = 0; i < 9; i++) {
                     const score = round.scores[p.name][i] || 0;
@@ -547,12 +608,30 @@ async function renderHistory() {
                     // For simplicity, recalculate based on saved SHCP and scores
                     const points = calculatePoints(p, i, score);
                     totalPoints += points;
+                    
+                    if (round.putts && round.putts[p.name]) {
+                        totalPutts += round.putts[p.name][i] || 0;
+                    }
+                    if (round.fir && round.fir[p.name] && COURSE_DATA[i].par > 3) {
+                        firPossible++;
+                        if (round.fir[p.name][i]) {
+                            firHits++;
+                        }
+                    }
+                }
+                
+                let statsHtml = '';
+                if (totalPutts > 0 || firPossible > 0) {
+                    statsHtml = `<div class="history-stats">Puttar: ${totalPutts} | FIR: ${firHits}/${firPossible}</div>`;
                 }
                 
                 html += `
                     <div class="history-player">
-                        <strong>${p.name}</strong>
-                        <span>${totalScore} slag (${totalPoints}p)</span>
+                        <div class="history-player-main" style="display:flex; justify-content:space-between; width:100%;">
+                            <strong>${p.name}</strong>
+                            <span>${totalScore} slag (${totalPoints}p)</span>
+                        </div>
+                        ${statsHtml}
                     </div>
                 `;
             });

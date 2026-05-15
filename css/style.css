@@ -457,7 +457,68 @@ tfoot {
 
 .history-player {
     display: flex;
+    flex-direction: column;
+    margin-bottom: 4px;
+}
+
+/* Stats Controls */
+.scoring-stats {
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px dashed var(--glass-border);
+    font-size: 0.85rem;
+}
+
+.stat-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.putts-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+}
+
+.stat-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(100, 116, 139, 0.2);
+    color: var(--text-primary);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.stat-btn:active {
+    background: rgba(100, 116, 139, 0.4);
+}
+
+.stat-value {
+    font-weight: 600;
+    min-width: 12px;
+    text-align: center;
+}
+
+.history-stats {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
 }
 
 /* Utilities */
