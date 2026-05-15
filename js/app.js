@@ -306,7 +306,7 @@ function renderStartView() {
         `;
         setupPlayersList.appendChild(li);
     });
-    btnStartRound.disabled = state.players.length === 0;
+    btnStartRound.disabled = false;
 }
 
 function addPlayer() {
@@ -337,6 +337,18 @@ window.removePlayer = function(index) {
 };
 
 function startRound() {
+    if (state.players.length === 0) {
+        const name = inputPlayerName.value.trim();
+        const shcp = parseInt(inputPlayerShcp.value, 10);
+        if (name && !isNaN(shcp)) {
+            addPlayer();
+        } else {
+            alert("Lägg till minst en spelare (namn och SHCP) innan du startar rundan.");
+            return;
+        }
+    }
+    
+    // In case addPlayer failed for some reason
     if (state.players.length === 0) return;
     
     state.currentHole = 1;
