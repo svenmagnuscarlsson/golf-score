@@ -1,320 +1,1523 @@
 <!DOCTYPE html>
-<html lang="sv" class="light">
-
+<html lang="sv" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Backa Säteri SCORE</title>
-
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Lexend:wght@600;700;800&display=swap"
-        rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
-    <script id="tailwind-config">
+    <title>MACA Score card</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
         tailwind.config = {
-            darkMode: "class",
+            darkMode: 'class',
             theme: {
                 extend: {
-                    "colors": {
-                        "inverse-primary": "#93d5a6",
-                        "on-secondary-container": "#626567",
-                        "inverse-on-surface": "#ecf1ff",
-                        "surface-variant": "#d8e3fb",
-                        "secondary-fixed": "#e0e3e5",
-                        "on-primary-fixed": "#00210f",
-                        "on-primary-fixed-variant": "#0a522e",
-                        "on-secondary": "#ffffff",
-                        "tertiary": "#735c00",
-                        "tertiary-fixed": "#ffe088",
-                        "on-secondary-fixed": "#191c1e",
-                        "on-surface-variant": "#404941",
-                        "surface-container-low": "#f0f3ff",
-                        "secondary": "#5c5f61",
-                        "on-surface": "#111c2d",
-                        "on-tertiary-container": "#4f3d00",
-                        "surface-container-highest": "#d8e3fb",
-                        "tertiary-fixed-dim": "#e9c349",
-                        "surface-bright": "#f9f9ff",
-                        "primary-fixed": "#aef2c1",
-                        "surface-tint": "#2a6a44",
-                        "on-primary": "#ffffff",
-                        "tertiary-container": "#cca730",
-                        "surface-container-high": "#dee8ff",
-                        "outline-variant": "#c0c9bf",
-                        "on-error-container": "#93000a",
-                        "outline": "#707971",
-                        "surface": "#f9f9ff",
-                        "inverse-surface": "#263143",
-                        "on-background": "#111c2d",
-                        "primary": "#00391d",
-                        "error": "#ba1a1a",
-                        "on-primary-container": "#82c496",
-                        "primary-fixed-dim": "#93d5a6",
-                        "surface-container": "#e7eeff",
-                        "on-tertiary-fixed": "#241a00",
-                        "on-tertiary": "#ffffff",
-                        "surface-container-lowest": "#ffffff",
-                        "on-secondary-fixed-variant": "#444749",
-                        "on-tertiary-fixed-variant": "#574500",
-                        "background": "#f9f9ff",
-                        "secondary-container": "#e0e3e5",
-                        "on-error": "#ffffff",
-                        "secondary-fixed-dim": "#c4c7c9",
-                        "error-container": "#ffdad6",
-                        "surface-dim": "#cfdaf2",
-                        "primary-container": "#0b522e"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "touch-target-min": "44px",
-                        "card-padding": "1rem",
-                        "touch-target-standard": "56px",
-                        "gutter": "1rem",
-                        "stack-md": "1rem",
-                        "stack-sm": "0.5rem",
-                        "margin-mobile": "1.25rem"
-                    },
-                    "fontFamily": {
-                        "body-lg": ["Hanken Grotesk", "sans-serif"],
-                        "headline-lg": ["Lexend", "sans-serif"],
-                        "body-md": ["Hanken Grotesk", "sans-serif"],
-                        "score-display": ["Lexend", "sans-serif"],
-                        "headline-md": ["Lexend", "sans-serif"],
-                        "label-sm": ["Hanken Grotesk", "sans-serif"],
-                        "label-bold": ["Lexend", "sans-serif"]
-                    },
-                    "fontSize": {
-                        "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "500" }],
-                        "headline-lg": ["30px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-                        "score-display": ["48px", { "lineHeight": "48px", "letterSpacing": "-0.04em", "fontWeight": "800" }],
-                        "headline-md": ["24px", { "lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
-                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
-                        "label-bold": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+                    colors: {
+                        golf: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        obsidian: {
+                            800: '#1e293b',
+                            850: '#111827',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
                     }
                 }
             }
         }
     </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .shadow-soft {
-                box-shadow: 0 4px 20px rgba(11, 82, 46, 0.08);
-            }
-            .hide-scrollbar::-webkit-scrollbar { display: none; }
-            .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    <style>
+        /* Touch improvements */
+        body {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            background-color: #020617; /* obsidian-950 */
+        }
+        .active-tab {
+            color: #10b981; /* emerald-500 */
+            border-top: 2px solid #10b981;
+        }
+        /* Custom scrollbar for clean grid table */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
-    <link rel="stylesheet" href="css/style.css">
 </head>
+<body class="text-slate-100 min-h-screen flex flex-col justify-between font-sans selection:bg-emerald-500 selection:text-white">
 
-<body
-    class="bg-background text-on-background font-body-md min-h-screen flex flex-col max-w-2xl mx-auto shadow-2xl relative">
+    <!-- Toast notifiering för bekräftelser -->
+    <div id="toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg z-50 transition-opacity duration-300 opacity-0 pointer-events-none">
+        Runda sparad!
+    </div>
 
-    <div id="app" class="flex-grow flex flex-col relative overflow-x-hidden">
-
-        <!-- TopAppBar (Generic for Start, History, Slope views) -->
-        <header id="generic-header"
-            class="flex justify-between items-center z-40 relative px-margin-mobile pt-4 pb-2 bg-surface shadow-sm shadow-primary/10">
-            <h1 id="header-title" class="font-headline-md text-headline-md text-primary font-bold">Backa Säteri</h1>
-            <div class="flex items-center gap-2">
-                <button id="btn-slope-toggle"
-                    class="w-touch-target-min h-touch-target-min flex items-center justify-center rounded-full bg-surface-container-low text-on-surface hover:bg-surface-variant transition-colors">
-                    <span class="material-symbols-outlined">table_chart</span>
-                </button>
-                <button id="btn-history-toggle"
-                    class="w-touch-target-min h-touch-target-min flex items-center justify-center rounded-full bg-surface-container-low text-on-surface hover:bg-surface-variant transition-colors">
-                    <span class="material-symbols-outlined">history</span>
-                </button>
+    <!-- HUVUDCONTAINER -->
+    <div id="app" class="w-full max-w-md mx-auto flex flex-col min-h-screen justify-between bg-obsidian-950 shadow-2xl relative">
+        
+        <!-- HEADER -->
+        <header class="p-4 border-b border-slate-800 bg-obsidian-900/80 backdrop-blur sticky top-0 z-40 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <span class="text-emerald-500">⛳</span> Golf 9 <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-normal">Premium</span>
+                </h1>
+                <p class="text-xs text-slate-400" id="header-player-info">Spelare: Gäst (Gul Tee • Spel-HCP: --)</p>
+            </div>
+            <!-- Snabbreglage: Totalt resultat mot Par och Poäng -->
+            <div class="text-right">
+                <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Resultat</div>
+                <div class="text-base font-mono font-black text-white" id="header-total-display">-- (Par 34)</div>
+                <div class="text-xs font-bold text-amber-400" id="header-points-display">-- poäng</div>
             </div>
         </header>
 
-        <main
-            class="flex-grow flex flex-col pt-4 px-margin-mobile pb-24 gap-stack-md relative overflow-y-auto hide-scrollbar">
+        <!-- HUVUDINNEHÅLL (VÄXLANDER FLIKAR) -->
+        <main class="flex-grow p-4 overflow-y-auto pb-24">
+            
+            <!-- FLIK 1: SPELA (HÅL-FÖR-HÅL-FOKUS) -->
+            <section id="tab-play" class="space-y-4">
+                <!-- Hål-väljare / Karusell-indikator -->
+                <div class="flex justify-between items-center bg-obsidian-900 p-2 rounded-xl border border-slate-800">
+                    <button onclick="prevHole()" class="p-3 bg-slate-800 hover:bg-slate-700 active:scale-95 text-white font-bold rounded-lg transition">&larr;</button>
+                    <div class="text-center">
+                        <span class="text-xs text-emerald-400 font-bold tracking-widest uppercase">Hål</span>
+                        <div class="text-3xl font-black text-white" id="current-hole-num">1</div>
+                    </div>
+                    <button onclick="nextHole()" class="p-3 bg-slate-800 hover:bg-slate-700 active:scale-95 text-white font-bold rounded-lg transition">&rarr;</button>
+                </div>
 
-            <!-- VIEW START -->
-            <section id="view-start" class="view flex-col gap-4">
-                <div class="bg-surface-container-lowest rounded-xl shadow-lg shadow-primary/5 p-card-padding">
-                    <h2 class="font-headline-md text-headline-md text-on-surface mb-4">Ny Runda</h2>
-                    <h3 class="font-label-bold text-label-bold text-on-surface-variant mb-2 uppercase tracking-wide">
-                        Spelare</h3>
-                    <ul id="setup-players-list" class="flex flex-col gap-2 mb-4">
-                        <!-- Players injected here -->
-                    </ul>
-                    <div class="flex gap-2 mb-4">
-                        <input type="text" id="input-player-name" placeholder="Namn"
-                            class="flex-1 min-w-0 bg-surface-container rounded-lg px-3 py-2 text-on-surface border-none focus:ring-2 focus:ring-primary outline-none placeholder:text-on-surface-variant/50">
-                        <input type="number" id="input-player-shcp" placeholder="SHCP"
-                            class="w-20 bg-surface-container rounded-lg px-3 py-2 text-on-surface border-none focus:ring-2 focus:ring-primary outline-none placeholder:text-on-surface-variant/50">
-                        <button id="btn-add-player"
-                            class="bg-secondary text-on-secondary rounded-lg px-3 py-2 font-label-bold hover:bg-secondary-fixed-dim transition-colors flex items-center justify-center">
-                            <span class="material-symbols-outlined">add</span>
+                <!-- Hål Detaljer (Par & Index) -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-obsidian-900 p-3 rounded-xl border border-slate-800 text-center">
+                        <span class="text-xs text-slate-400 block mb-1">Hålets Par</span>
+                        <div class="flex justify-center items-center gap-2">
+                            <span class="text-2xl font-bold font-mono text-white" id="hole-par-display">4</span>
+                        </div>
+                    </div>
+                    <div class="bg-obsidian-900 p-3 rounded-xl border border-slate-800 text-center flex flex-col justify-center">
+                        <span class="text-xs text-slate-400 block mb-1">Hålets Index</span>
+                        <span class="text-2xl font-bold font-mono text-white py-0.5" id="hole-index-display">3</span>
+                    </div>
+                </div>
+
+                <!-- STORA TAKTILA REGLAGE (SLAG & PUTTAR) -->
+                <div class="bg-obsidian-900 p-5 rounded-2xl border border-slate-800 space-y-6">
+                    <!-- SLAG-RÄKNARE -->
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-between w-full items-center mb-2">
+                            <span class="text-sm font-semibold text-slate-300 uppercase tracking-wider">Antal Slag (Totalt)</span>
+                            <span id="score-name-badge" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-800 text-slate-300">Skriv in resultat</span>
+                        </div>
+                        <div class="flex items-center gap-4 w-full justify-between">
+                            <button onclick="updateCurrentScore('strokes', -1)" class="w-16 h-16 bg-slate-800 hover:bg-slate-700 active:scale-90 text-2xl font-black text-slate-200 rounded-2xl flex items-center justify-center transition shadow-lg">-</button>
+                            <span class="text-5xl font-mono font-black text-emerald-400 w-24 text-center select-none" id="current-strokes">0</span>
+                            <button onclick="updateCurrentScore('strokes', 1)" class="w-16 h-16 bg-emerald-600 hover:bg-emerald-500 active:scale-90 text-2xl font-black text-white rounded-2xl flex items-center justify-center transition shadow-lg">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Separator -->
+                    <hr class="border-slate-800">
+
+                    <!-- PUTT-RÄKNARE -->
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-between w-full items-center mb-2">
+                            <span class="text-sm font-semibold text-slate-300 uppercase tracking-wider">Antal Puttar</span>
+                            <span id="gir-badge" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-800 text-slate-400">GIR ej uppnådd</span>
+                        </div>
+                        <div class="flex items-center gap-4 w-full justify-between">
+                            <button onclick="updateCurrentScore('putts', -1)" class="w-16 h-16 bg-slate-800 hover:bg-slate-700 active:scale-90 text-2xl font-black text-slate-200 rounded-2xl flex items-center justify-center transition shadow-lg">-</button>
+                            <span class="text-5xl font-mono font-black text-blue-400 w-24 text-center select-none" id="current-putts">0</span>
+                            <button onclick="updateCurrentScore('putts', 1)" class="w-16 h-16 bg-blue-600 hover:bg-blue-500 active:scale-90 text-2xl font-black text-white rounded-2xl flex items-center justify-center transition shadow-lg">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DRIVESPÅRNING (FIR) - Visas bara om Par > 3 -->
+                <div id="fir-section" class="bg-obsidian-900 p-4 rounded-xl border border-slate-800 space-y-2">
+                    <span class="text-xs text-slate-400 block text-center font-semibold uppercase tracking-wider">Drive (Fairwayträff)</span>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button id="fir-left" onclick="setFIR('left')" class="py-3 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl flex flex-col items-center justify-center transition border border-transparent">
+                            <span class="text-xl">↖️</span>
+                            <span class="text-[10px] text-slate-300 mt-1">Vänster rough</span>
+                        </button>
+                        <button id="fir-hit" onclick="setFIR('hit')" class="py-3 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl flex flex-col items-center justify-center transition border border-transparent">
+                            <span class="text-xl">🎯</span>
+                            <span class="text-[10px] text-emerald-400 mt-1">Träff (FIR)</span>
+                        </button>
+                        <button id="fir-right" onclick="setFIR('right')" class="py-3 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl flex flex-col items-center justify-center transition border border-transparent">
+                            <span class="text-xl">↗️</span>
+                            <span class="text-[10px] text-slate-300 mt-1">Höger rough</span>
                         </button>
                     </div>
-                    <button id="btn-start-round"
-                        class="w-full bg-primary text-on-primary font-label-bold text-label-bold h-touch-target-standard rounded-full shadow-lg shadow-primary/20 hover:bg-primary-container active:scale-95 transition-all duration-200 mt-4 disabled:opacity-50">Starta
-                        Runda</button>
                 </div>
             </section>
 
-            <!-- VIEW SLOPE -->
-            <section id="view-slope" class="view flex-col gap-4">
-                <div class="bg-surface-container-lowest rounded-xl shadow-lg shadow-primary/5 p-card-padding">
-                    <h2 class="font-headline-md text-headline-md text-on-surface mb-4">Slopetabell</h2>
-                    <img src="images/slopetabell.png" alt="Slopetabell"
-                        class="w-full rounded-lg border border-outline-variant">
-                    <button id="btn-back-from-slope"
-                        class="mt-4 bg-secondary text-on-secondary rounded-lg px-4 py-2 font-label-bold w-full hover:bg-secondary-fixed-dim transition-colors h-touch-target-min">Tillbaka</button>
+            <!-- FLIK 2: SCOREKORT (TABELLÖVERSIKT) -->
+            <section id="tab-card" class="space-y-4 hidden">
+                <div class="bg-obsidian-900 rounded-2xl border border-slate-800 overflow-hidden shadow-lg">
+                    <div class="p-4 border-b border-slate-800 flex justify-between items-center">
+                        <h3 class="font-bold text-white">Fullständigt Scorekort</h3>
+                        <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-md" id="scorecard-tee-badge">Gul Tee</span>
+                    </div>
+                    
+                    <div class="overflow-x-auto no-scrollbar">
+                        <table class="w-full text-left border-collapse font-mono text-xs md:text-sm">
+                            <thead>
+                                <tr class="bg-slate-900/50 text-slate-400 uppercase border-b border-slate-800">
+                                    <th class="p-2 text-center">Hål</th>
+                                    <th class="p-2 text-center">Par</th>
+                                    <th class="p-2 text-center">HCP</th>
+                                    <th class="p-2 text-center text-white">Slag</th>
+                                    <th class="p-2 text-center text-blue-400">Putt</th>
+                                    <th class="p-2 text-center text-emerald-400">Netto</th>
+                                    <th class="p-2 text-center text-amber-400">Poäng</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scorecard-table-body">
+                                <!-- Genereras dynamiskt -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </section>
 
-            <!-- VIEW HOLE -->
-            <section id="view-hole" class="view flex-col gap-4">
-                <!-- Hole Navigation & Overview Card -->
-                <div
-                    class="bg-surface-container-lowest rounded-xl shadow-lg shadow-primary/5 p-card-padding z-10 relative flex flex-col gap-4">
-                    <!-- Hole Selector / Swipe Area -->
-                    <div class="flex justify-between items-center border-b border-outline-variant pb-4">
-                        <button id="btn-prev-hole"
-                            class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center w-touch-target-min h-touch-target-min active:scale-90">
-                            <span class="material-symbols-outlined text-2xl">chevron_left</span>
+                <!-- Spara & kontrollknappar -->
+                <div class="space-y-2">
+                    <button onclick="attemptSaveRound()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white rounded-xl font-extrabold flex items-center justify-center gap-2 transition shadow-xl text-sm tracking-wide">
+                        💾 Spara Runda i Historik
+                    </button>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="shareRound()" class="py-3 bg-slate-800 hover:bg-slate-700 active:scale-95 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition border border-slate-700">
+                            <span>📤</span> Dela Resultat
                         </button>
-                        <div class="text-center flex flex-col items-center">
-                            <span class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-1">Backa
-                                Säteri</span>
-                            <h2 id="current-hole-number" class="font-headline-lg text-headline-lg text-on-surface">Hole
-                                1</h2>
-                        </div>
-                        <button id="btn-next-hole"
-                            class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center w-touch-target-min h-touch-target-min active:scale-90">
-                            <span class="material-symbols-outlined text-2xl">chevron_right</span>
+                        <button onclick="triggerResetModal()" class="py-3 bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 border border-rose-900/40 rounded-xl font-medium transition active:scale-95">
+                            Nollställ Runda
                         </button>
                     </div>
-
-                    <!-- Hole Details -->
-                    <div class="flex justify-around items-center pt-2">
-                        <div class="text-center">
-                            <p class="font-label-sm text-label-sm text-on-surface-variant">PAR</p>
-                            <p id="current-hole-par" class="font-headline-md text-headline-md text-on-surface">4</p>
-                        </div>
-                        <div class="h-8 w-px bg-outline-variant"></div>
-                        <div class="text-center">
-                            <p
-                                class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 justify-center">
-                                <span class="w-2 h-2 rounded-full bg-primary-container inline-block"></span> HDCP
-                            </p>
-                            <p id="current-hole-index" class="font-headline-md text-headline-md text-on-surface">3</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mini-Map / Yardage Visual (Bento Style) -->
-                <div
-                    class="h-48 rounded-xl overflow-hidden relative shadow-md shadow-primary/5 z-0 bg-surface-container-low border border-outline-variant">
-                    <div id="hole-image-wrapper" class="w-full h-full relative">
-                        <img id="current-hole-img" src="images/hal-1.png" alt="Banguide"
-                            class="w-full h-full object-cover opacity-80" />
-                    </div>
-                    <div id="hole-map-wrapper" class="w-full h-full relative hidden">
-                        <div id="map" class="w-full h-full z-0"></div>
-                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 z-[1000] flex gap-2 w-11/12">
-                            <button id="btn-fetch-gps"
-                                class="flex-1 bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface text-xs font-label-bold py-2 rounded-lg border border-outline-variant/50 shadow-sm flex items-center justify-center gap-1">📍
-                                Hämta</button>
-                            <button id="btn-save-gps"
-                                class="flex-1 bg-primary text-on-primary text-xs font-label-bold py-2 rounded-lg shadow-md shadow-primary/20 flex items-center justify-center gap-1">💾
-                                Spara</button>
-                        </div>
-                    </div>
-
-                    <!-- Overlay Toggles -->
-                    <div
-                        class="absolute top-2 right-2 flex gap-1 bg-surface-container-lowest/80 backdrop-blur-sm p-1 rounded-lg border border-outline-variant/50 z-10">
-                        <button id="btn-show-image"
-                            class="px-2 py-1 text-xs font-label-bold rounded bg-primary text-on-primary">Banguide</button>
-                        <button id="btn-show-map"
-                            class="px-2 py-1 text-xs font-label-bold rounded text-on-surface hover:bg-surface-variant transition-colors">Karta</button>
-                    </div>
-                </div>
-
-                <!-- Scorecard Grid Preview (Horizontal Scroll) -->
-                <div class="mt-2 mb-2">
-                    <h4 class="font-label-bold text-label-bold text-on-surface-variant mb-2 uppercase tracking-wide">
-                        Rond Score</h4>
-                    <div id="scorecard-mini-grid" class="flex overflow-x-auto pb-4 gap-2 snap-x hide-scrollbar">
-                        <!-- Mini grid injected here -->
-                    </div>
-                </div>
-
-                <!-- Players Scoring Area -->
-                <div id="scoring-players-list" class="flex flex-col gap-6 z-10 relative">
-                    <!-- Player scoring cards injected here -->
-                </div>
-
-                <div class="mt-4 flex justify-center pb-8">
-                    <button id="btn-finish-round"
-                        class="hidden bg-primary text-on-primary font-label-bold text-label-bold h-touch-target-standard px-8 rounded-full shadow-lg shadow-primary/20 hover:bg-primary-container active:scale-95 transition-all duration-200 flex items-center gap-2 w-full justify-center">
-                        <span class="material-symbols-outlined">done_all</span> Avsluta Runda
-                    </button>
                 </div>
             </section>
 
-            <!-- VIEW SCORECARD (ROUND SUMMARY) -->
-            <section id="view-scorecard" class="view flex-col gap-4">
-                <div class="flex justify-between items-end mb-2">
-                    <div>
-                        <p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1">Round
-                            Summary</p>
-                        <h2 class="font-headline-lg text-headline-lg text-on-surface">Final Score</h2>
+            <!-- FLIK 3: STATISTIK & ANALYS -->
+            <section id="tab-stats" class="space-y-4 hidden">
+                <div class="grid grid-cols-3 gap-2">
+                    <!-- Score Stats -->
+                    <div class="bg-obsidian-900 p-3 rounded-xl border border-slate-800 text-center">
+                        <span class="text-[10px] text-slate-400 block uppercase font-bold mb-1">Bruttoslag</span>
+                        <div class="text-2xl font-black text-white" id="stat-gross">34</div>
+                        <span class="text-[9px] text-slate-400" id="stat-gross-rel">E (Par 34)</span>
+                    </div>
+                    <div class="bg-obsidian-900 p-3 rounded-xl border border-slate-800 text-center">
+                        <span class="text-[10px] text-slate-400 block uppercase font-bold mb-1">Nettoslag</span>
+                        <div class="text-2xl font-black text-emerald-400" id="stat-net">26</div>
+                        <span class="text-[9px] text-emerald-500/80" id="stat-net-rel">-8 under hcp</span>
+                    </div>
+                    <div class="bg-obsidian-900 p-3 rounded-xl border border-slate-800 text-center">
+                        <span class="text-[10px] text-slate-400 block uppercase font-bold mb-1">Poängbogey</span>
+                        <div class="text-2xl font-black text-amber-400" id="stat-points">0</div>
+                        <span class="text-[9px] text-amber-500/80" id="stat-points-rel">18p är par</span>
                     </div>
                 </div>
 
-                <div id="scorecard-summaries" class="flex flex-col gap-8">
-                    <!-- Summaries injected here -->
+                <!-- Detaljerad golfstatistik -->
+                <div class="bg-obsidian-900 p-4 rounded-2xl border border-slate-800 space-y-4">
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wide border-b border-slate-800 pb-2">Spelanalys (Aktuell runda)</h4>
+                    
+                    <!-- GIR % -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-400">Green in Regulation (GIR)</span>
+                            <span class="text-white" id="stat-gir-perc">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                            <div id="stat-gir-bar" class="bg-emerald-500 h-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <span class="text-[9px] text-slate-500 block">Nå greenen på par minus 2 slag eller bättre</span>
+                    </div>
+
+                    <!-- Puttmedeltal -->
+                    <div class="flex justify-between items-center py-2 border-b border-slate-800/50">
+                        <span class="text-xs text-slate-400 font-semibold">Puttar totalt / Snitt per hål</span>
+                        <div class="text-right">
+                            <div class="text-sm font-bold text-white" id="stat-putts-total">0</div>
+                            <div class="text-[10px] text-blue-400" id="stat-putts-avg">0.0 per hål</div>
+                        </div>
+                    </div>
+
+                    <!-- Fairwayträffar distribution -->
+                    <div class="space-y-2">
+                        <span class="text-xs text-slate-400 font-semibold block">Drivedistribution (FIR)</span>
+                        <div class="flex items-center gap-1 w-full text-center text-[10px] font-bold">
+                            <div id="stat-fir-left" class="bg-slate-800 text-slate-400 py-2 rounded-l transition-all duration-500" style="width: 33%">V 33%</div>
+                            <div id="stat-fir-hit" class="bg-emerald-600/50 text-emerald-300 py-2 transition-all duration-500" style="width: 34%">TRÄFF 34%</div>
+                            <div id="stat-fir-right" class="bg-slate-800 text-slate-400 py-2 rounded-r transition-all duration-500" style="width: 33%">H 33%</div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mt-8 flex flex-col gap-4 pb-8">
-                    <button id="btn-save-round"
-                        class="bg-primary text-on-primary font-label-bold text-label-bold h-touch-target-standard px-8 rounded-full shadow-lg shadow-primary/20 hover:bg-primary-container active:scale-95 transition-all duration-200 flex items-center gap-2 w-full justify-center">
-                        <span class="material-symbols-outlined">save</span> Spara Runda
-                    </button>
-                    <button id="btn-discard-round"
-                        class="bg-transparent text-error font-label-bold text-label-bold py-2 w-full text-center hover:underline h-touch-target-min">
-                        Kasta Runda
-                    </button>
+                <!-- NYTT: RUNDHISTORIK FRÅN INDEXEDDB -->
+                <div class="bg-obsidian-900 p-4 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                        <h4 class="font-bold text-white text-sm uppercase tracking-wide">Rundhistorik (IndexedDB)</h4>
+                        <span id="history-count" class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">0 sparade</span>
+                    </div>
+                    
+                    <div id="history-container" class="space-y-3">
+                        <!-- Laddas dynamiskt -->
+                        <div class="text-center py-6 text-slate-500 text-xs">
+                            Inga sparade rundor i historiken än.
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- VIEW HISTORY -->
-            <section id="view-history" class="view flex-col gap-4">
-                <div class="bg-surface-container-lowest rounded-xl shadow-lg shadow-primary/5 p-card-padding">
-                    <h2 class="font-headline-md text-headline-md text-on-surface mb-4">Historik</h2>
-                    <ul id="history-list" class="flex flex-col gap-4">
-                        <!-- History injected here -->
-                    </ul>
-                    <button id="btn-back-to-start"
-                        class="mt-4 bg-secondary text-on-secondary rounded-lg px-4 py-2 font-label-bold w-full hover:bg-secondary-fixed-dim transition-colors h-touch-target-min">Tillbaka</button>
+            <!-- FLIK 4: INSTÄLLNINGAR -->
+            <section id="tab-settings" class="space-y-4 hidden">
+                <div class="bg-obsidian-900 p-4 rounded-2xl border border-slate-800 space-y-4">
+                    <h3 class="font-bold text-white border-b border-slate-800 pb-2">Spelarkonfiguration</h3>
+                    
+                    <!-- Spelarnamn -->
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-semibold uppercase">Spelarnamn</label>
+                        <input type="text" id="input-player-name" onchange="savePlayerSettings()" value="Spelare" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500 transition">
+                    </div>
+
+                    <!-- VÄLJ TEE (FÄRGKODAD) -->
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-semibold uppercase block mb-1">Spel-Tee (Bana & Slope)</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <!-- Vit Tee -->
+                            <button onclick="setTee('Vit')" id="tee-Vit" class="py-2.5 px-2 rounded-xl border border-slate-700 text-center bg-transparent transition active:scale-95">
+                                <span class="w-3 h-3 rounded-full bg-white inline-block mb-1 shadow"></span>
+                                <div class="text-xs font-bold text-white">Vit</div>
+                                <div class="text-[9px] text-slate-400">CR 68.7 / SR 136</div>
+                            </button>
+                            <!-- Gul Tee -->
+                            <button onclick="setTee('Gul')" id="tee-Gul" class="py-2.5 px-2 rounded-xl border border-slate-700 text-center bg-transparent transition active:scale-95">
+                                <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block mb-1 shadow"></span>
+                                <div class="text-xs font-bold text-white">Gul</div>
+                                <div class="text-[9px] text-slate-400">CR 67.1 / SR 132</div>
+                            </button>
+                            <!-- Röd Tee -->
+                            <button onclick="setTee('Röd')" id="tee-Röd" class="py-2.5 px-2 rounded-xl border border-slate-700 text-center bg-transparent transition active:scale-95">
+                                <span class="w-3 h-3 rounded-full bg-rose-500 inline-block mb-1 shadow"></span>
+                                <div class="text-xs font-bold text-white">Röd</div>
+                                <div class="text-[9px] text-slate-400">CR 64.8 / SR 127</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- EXAKT HANDICAP (EXAKT HCP) -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs text-slate-400 font-semibold uppercase">Ditt Exakta HCP</label>
+                            <span id="display-hcp-type" class="text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full font-mono">Standard</span>
+                        </div>
+                        <div class="flex items-center gap-3 bg-slate-850 p-2 rounded-xl border border-slate-800">
+                            <button onclick="adjustExactHCP(-1.0)" class="w-10 h-10 bg-slate-800 rounded-lg text-sm font-bold active:scale-95 text-slate-400 hover:text-white transition">-1.0</button>
+                            <button onclick="adjustExactHCP(-0.1)" class="w-10 h-10 bg-slate-800 rounded-lg text-sm font-bold active:scale-95 text-slate-300 hover:text-white transition">-0.1</button>
+                            
+                            <div class="flex-grow text-center">
+                                <input type="number" id="input-exact-hcp" step="0.1" value="18.4" onchange="manualExactHCPChange(this.value)" class="w-full text-center bg-transparent text-2xl font-mono font-black text-white focus:outline-none select-all">
+                            </div>
+                            
+                            <button onclick="adjustExactHCP(0.1)" class="w-10 h-10 bg-slate-800 rounded-lg text-sm font-bold active:scale-95 text-slate-300 hover:text-white transition">+0.1</button>
+                            <button onclick="adjustExactHCP(1.0)" class="w-10 h-10 bg-slate-800 rounded-lg text-sm font-bold active:scale-95 text-slate-400 hover:text-white transition">+1.0</button>
+                        </div>
+                    </div>
+
+                    <!-- BERÄKNAT SPEL-HCP RESULTATSKORT -->
+                    <div class="bg-emerald-950/20 border border-emerald-900/30 p-3 rounded-xl flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider block">Slopematchat resultat</span>
+                            <span class="text-xs text-slate-400" id="slope-calculation-text">Vit Tee • Exakt HCP: 14.2</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] text-slate-400 block">Dina erhållna slag</span>
+                            <div class="text-2xl font-mono font-black text-emerald-400" id="display-computed-spelhcp">18</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-obsidian-900 p-4 rounded-2xl border border-slate-800">
+                    <h3 class="font-bold text-white mb-2">Offline-status (PWA)</h3>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-slate-400">Arbeta utan täckning</span>
+                        <span class="text-xs text-emerald-400 font-bold px-2.5 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
+                            <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span> Redo i fält (IndexedDB)
+                        </span>
+                    </div>
                 </div>
             </section>
 
         </main>
+
+        <!-- CUSTOM MODAL: BEKRÄFTA NOLLSTÄLLNING -->
+        <div id="reset-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 transition-all duration-300 opacity-0 pointer-events-none">
+            <div class="bg-obsidian-900 p-6 rounded-2xl border border-slate-800 w-full max-w-sm space-y-4">
+                <div class="text-center space-y-2">
+                    <span class="text-4xl">⚠️</span>
+                    <h3 class="text-lg font-bold text-white">Vill du nollställa rundan?</h3>
+                    <p class="text-sm text-slate-400">All påbörjad inmatning för denna runda kommer raderas.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="closeResetModal()" class="py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-semibold transition">
+                        Avbryt
+                    </button>
+                    <button onclick="resetGameConfirmed()" class="py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-semibold transition">
+                        Ja, nollställ
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CUSTOM MODAL: BEKRÄFTA SPARA OFULLSTÄNDIG RUNDA -->
+        <div id="save-confirm-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 transition-all duration-300 opacity-0 pointer-events-none">
+            <div class="bg-obsidian-900 p-6 rounded-2xl border border-slate-800 w-full max-w-sm space-y-4">
+                <div class="text-center space-y-2">
+                    <span class="text-4xl">🏌️‍♂️</span>
+                    <h3 class="text-lg font-bold text-white">Spara påbörjad runda?</h3>
+                    <p class="text-sm text-slate-400" id="save-confirm-text">Du har inte fyllt i resultat för alla 9 hålen. Vill du spara rundan som den är och påbörja ett nytt kort?</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="closeSaveConfirmModal()" class="py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-semibold transition">
+                        Avbryt
+                    </button>
+                    <button onclick="saveRoundConfirmed()" class="py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold transition">
+                        Ja, spara runda
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CUSTOM MODAL: BEKRÄFTA RADERING AV SPARAD RUNDA -->
+        <div id="delete-confirm-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 transition-all duration-300 opacity-0 pointer-events-none">
+            <div class="bg-obsidian-900 p-6 rounded-2xl border border-slate-800 w-full max-w-sm space-y-4">
+                <div class="text-center space-y-2">
+                    <span class="text-4xl">🗑️</span>
+                    <h3 class="text-lg font-bold text-white">Radera runda permanent?</h3>
+                    <p class="text-sm text-slate-400">Denna runda kommer tas bort från din historik och kan inte återställas.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="closeDeleteConfirmModal()" class="py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-semibold transition">
+                        Avbryt
+                    </button>
+                    <button id="delete-confirm-btn" class="py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-semibold transition">
+                        Ja, radera
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STICKY BOTTOM NAVIGATION (ERGONOMISK) -->
+        <nav class="sticky bottom-0 left-0 right-0 h-20 bg-obsidian-900 border-t border-slate-800 flex justify-around items-center px-2 z-40">
+            <button onclick="switchTab('play')" id="btn-tab-play" class="flex flex-col items-center justify-center w-20 h-full text-slate-400 active-tab transition-all">
+                <span class="text-xl mb-1">🏌️‍♂️</span>
+                <span class="text-[10px] font-bold tracking-wider">SPELA</span>
+            </button>
+            <button onclick="switchTab('card')" id="btn-tab-card" class="flex flex-col items-center justify-center w-20 h-full text-slate-400 transition-all">
+                <span class="text-xl mb-1">📋</span>
+                <span class="text-[10px] font-bold tracking-wider">KORTET</span>
+            </button>
+            <button onclick="switchTab('stats')" id="btn-tab-stats" class="flex flex-col items-center justify-center w-20 h-full text-slate-400 transition-all">
+                <span class="text-xl mb-1">📈</span>
+                <span class="text-[10px] font-bold tracking-wider">STATISTIK</span>
+            </button>
+            <button onclick="switchTab('settings')" id="btn-tab-settings" class="flex flex-col items-center justify-center w-20 h-full text-slate-400 transition-all">
+                <span class="text-xl mb-1">⚙️</span>
+                <span class="text-[10px] font-bold tracking-wider">INSTÄLLNINGAR</span>
+            </button>
+        </nav>
+
     </div>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="js/db.js"></script>
-    <script src="js/app.js"></script>
-</body>
+    <!-- APP LOGICS & STATE -->
+    <script>
+        // Officiella Slope tabeller från användaren för 9-hålsbanan
+        const SLOPE_TABLE = {
+            "Vit": {
+                "courseRating": 68.7,
+                "slopeRating": 136,
+                "handicapIntervaller": [
+                    { "handicapMin": "+4.0", "handicapMax": "+3.5", "spelhcp": -4 },
+                    { "handicapMin": "+3.4", "handicapMax": "+2.7", "spelhcp": -3 },
+                    { "handicapMin": "+2.6", "handicapMax": "+1.9", "spelhcp": -2 },
+                    { "handicapMin": "+1.8", "handicapMax": "+1.0", "spelhcp": -1 },
+                    { "handicapMin": "+0.9", "handicapMax": "+0.2", "spelhcp": 0 },
+                    { "handicapMin": "+0.1", "handicapMax": "0.6", "spelhcp": 1 },
+                    { "handicapMin": "0.7", "handicapMax": "1.4", "spelhcp": 2 },
+                    { "handicapMin": "1.5", "handicapMax": "2.3", "spelhcp": 3 },
+                    { "handicapMin": "2.4", "handicapMax": "3.1", "spelhcp": 4 },
+                    { "handicapMin": "3.2", "handicapMax": "3.9", "spelhcp": 5 },
+                    { "handicapMin": "4.0", "handicapMax": "4.8", "spelhcp": 6 },
+                    { "handicapMin": "4.9", "handicapMax": "5.6", "spelhcp": 7 },
+                    { "handicapMin": "5.7", "handicapMax": "6.4", "spelhcp": 8 },
+                    { "handicapMin": "6.5", "handicapMax": "7.3", "spelhcp": 9 },
+                    { "handicapMin": "7.4", "handicapMax": "8.1", "spelhcp": 10 },
+                    { "handicapMin": "8.2", "handicapMax": "8.9", "spelhcp": 11 },
+                    { "handicapMin": "9.0", "handicapMax": "9.8", "spelhcp": 12 },
+                    { "handicapMin": "9.9", "handicapMax": "10.6", "spelhcp": 13 },
+                    { "handicapMin": "10.7", "handicapMax": "11.4", "spelhcp": 14 },
+                    { "handicapMin": "11.5", "handicapMax": "12.2", "spelhcp": 15 },
+                    { "handicapMin": "12.3", "handicapMax": "13.1", "spelhcp": 16 },
+                    { "handicapMin": "13.2", "handicapMax": "13.9", "spelhcp": 17 },
+                    { "handicapMin": "14.0", "handicapMax": "14.7", "spelhcp": 18 },
+                    { "handicapMin": "14.8", "handicapMax": "15.6", "spelhcp": 19 },
+                    { "handicapMin": "15.7", "handicapMax": "16.4", "spelhcp": 20 },
+                    { "handicapMin": "16.5", "handicapMax": "17.2", "spelhcp": 21 },
+                    { "handicapMin": "17.3", "handicapMax": "18.1", "spelhcp": 22 },
+                    { "handicapMin": "18.2", "handicapMax": "18.9", "spelhcp": 23 },
+                    { "handicapMin": "19.0", "handicapMax": "19.7", "spelhcp": 24 },
+                    { "handicapMin": "19.8", "handicapMax": "20.6", "spelhcp": 25 },
+                    { "handicapMin": "20.7", "handicapMax": "21.4", "spelhcp": 26 },
+                    { "handicapMin": "21.5", "handicapMax": "22.2", "spelhcp": 27 },
+                    { "handicapMin": "22.3", "handicapMax": "23.0", "spelhcp": 28 },
+                    { "handicapMin": "23.1", "handicapMax": "23.9", "spelhcp": 29 },
+                    { "handicapMin": "24.0", "handicapMax": "24.7", "spelhcp": 30 },
+                    { "handicapMin": "24.8", "handicapMax": "25.5", "spelhcp": 31 },
+                    { "handicapMin": "25.6", "handicapMax": "26.4", "spelhcp": 32 },
+                    { "handicapMin": "26.5", "handicapMax": "27.2", "spelhcp": 33 },
+                    { "handicapMin": "27.3", "handicapMax": "28.0", "spelhcp": 34 },
+                    { "handicapMin": "28.1", "handicapMax": "28.9", "spelhcp": 35 },
+                    { "handicapMin": "29.0", "handicapMax": "29.7", "spelhcp": 36 },
+                    { "handicapMin": "29.8", "handicapMax": "30.5", "spelhcp": 37 },
+                    { "handicapMin": "30.6", "handicapMax": "31.4", "spelhcp": 38 },
+                    { "handicapMin": "31.5", "handicapMax": "32.2", "spelhcp": 39 },
+                    { "handicapMin": "32.3", "handicapMax": "33.0", "spelhcp": 40 },
+                    { "handicapMin": "33.1", "handicapMax": "33.8", "spelhcp": 41 },
+                    { "handicapMin": "33.9", "handicapMax": "34.7", "spelhcp": 42 },
+                    { "handicapMin": "34.8", "handicapMax": "35.5", "spelhcp": 43 },
+                    { "handicapMin": "35.6", "handicapMax": "36.3", "spelhcp": 44 },
+                    { "handicapMin": "36.4", "handicapMax": "37.2", "spelhcp": 45 },
+                    { "handicapMin": "37.3", "handicapMax": "38.0", "spelhcp": 46 },
+                    { "handicapMin": "38.1", "handicapMax": "38.8", "spelhcp": 47 },
+                    { "handicapMin": "38.9", "handicapMax": "39.7", "spelhcp": 48 },
+                    { "handicapMin": "39.8", "handicapMax": "40.5", "spelhcp": 49 },
+                    { "handicapMin": "40.6", "handicapMax": "41.3", "spelhcp": 50 },
+                    { "handicapMin": "41.4", "handicapMax": "42.2", "spelhcp": 51 },
+                    { "handicapMin": "42.3", "handicapMax": "43.0", "spelhcp": 52 },
+                    { "handicapMin": "43.1", "handicapMax": "43.8", "spelhcp": 53 },
+                    { "handicapMin": "43.9", "handicapMax": "44.7", "spelhcp": 54 },
+                    { "handicapMin": "44.8", "handicapMax": "45.5", "spelhcp": 55 },
+                    { "handicapMin": "45.6", "handicapMax": "46.3", "spelhcp": 56 },
+                    { "handicapMin": "46.4", "handicapMax": "47.1", "spelhcp": 57 },
+                    { "handicapMin": "47.2", "handicapMax": "48.0", "spelhcp": 58 },
+                    { "handicapMin": "48.1", "handicapMax": "48.8", "spelhcp": 59 },
+                    { "handicapMin": "48.9", "handicapMax": "49.6", "spelhcp": 60 },
+                    { "handicapMin": "49.7", "handicapMax": "50.5", "spelhcp": 61 },
+                    { "handicapMin": "50.6", "handicapMax": "51.3", "spelhcp": 62 },
+                    { "handicapMin": "51.4", "handicapMax": "52.1", "spelhcp": 63 },
+                    { "handicapMin": "52.2", "handicapMax": "53.0", "spelhcp": 64 },
+                    { "handicapMin": "53.1", "handicapMax": "53.8", "spelhcp": 65 },
+                    { "handicapMin": "53.9", "handicapMax": "54.0", "spelhcp": 66 }
+                ]
+            },
+            "Gul": {
+                "courseRating": 67.1,
+                "slopeRating": 132,
+                "handicapIntervaller": [
+                    { "handicapMin": "+4.0", "handicapMax": "+4.0", "spelhcp": -6 },
+                    { "handicapMin": "+3.9", "handicapMax": "+3.1", "spelhcp": -5 },
+                    { "handicapMin": "+3.0", "handicapMax": "+2.3", "spelhcp": -4 },
+                    { "handicapMin": "+2.2", "handicapMax": "+1.4", "spelhcp": -3 },
+                    { "handicapMin": "+1.3", "handicapMax": "+0.6", "spelhcp": -2 },
+                    { "handicapMin": "+0.5", "handicapMax": "0.3", "spelhcp": -1 },
+                    { "handicapMin": "0.4", "handicapMax": "1.1", "spelhcp": 0 },
+                    { "handicapMin": "1.2", "handicapMax": "2.0", "spelhcp": 1 },
+                    { "handicapMin": "2.1", "handicapMax": "2.9", "spelhcp": 2 },
+                    { "handicapMin": "3.0", "handicapMax": "3.7", "spelhcp": 3 },
+                    { "handicapMin": "3.8", "handicapMax": "4.6", "spelhcp": 4 },
+                    { "handicapMin": "4.7", "handicapMax": "5.4", "spelhcp": 5 },
+                    { "handicapMin": "5.5", "handicapMax": "6.3", "spelhcp": 6 },
+                    { "handicapMin": "6.4", "handicapMax": "7.1", "spelhcp": 7 },
+                    { "handicapMin": "7.2", "handicapMax": "8.0", "spelhcp": 8 },
+                    { "handicapMin": "8.1", "handicapMax": "8.9", "spelhcp": 9 },
+                    { "handicapMin": "9.0", "handicapMax": "9.7", "spelhcp": 10 },
+                    { "handicapMin": "9.8", "handicapMax": "10.6", "spelhcp": 11 },
+                    { "handicapMin": "10.7", "handicapMax": "11.4", "spelhcp": 12 },
+                    { "handicapMin": "11.5", "handicapMax": "12.3", "spelhcp": 13 },
+                    { "handicapMin": "12.4", "handicapMax": "13.1", "spelhcp": 14 },
+                    { "handicapMin": "13.2", "handicapMax": "14.0", "spelhcp": 15 },
+                    { "handicapMin": "14.1", "handicapMax": "14.8", "spelhcp": 16 },
+                    { "handicapMin": "14.9", "handicapMax": "15.7", "spelhcp": 17 },
+                    { "handicapMin": "15.8", "handicapMax": "16.6", "spelhcp": 18 },
+                    { "handicapMin": "16.7", "handicapMax": "17.4", "spelhcp": 19 },
+                    { "handicapMin": "17.5", "handicapMax": "18.3", "spelhcp": 20 },
+                    { "handicapMin": "18.4", "handicapMax": "19.1", "spelhcp": 21 },
+                    { "handicapMin": "19.2", "handicapMax": "20.0", "spelhcp": 22 },
+                    { "handicapMin": "20.1", "handicapMax": "20.8", "spelhcp": 23 },
+                    { "handicapMin": "20.9", "handicapMax": "21.7", "spelhcp": 24 },
+                    { "handicapMin": "21.8", "handicapMax": "22.5", "spelhcp": 25 },
+                    { "handicapMin": "22.6", "handicapMax": "23.4", "spelhcp": 26 },
+                    { "handicapMin": "23.5", "handicapMax": "24.3", "spelhcp": 27 },
+                    { "handicapMin": "24.4", "handicapMax": "25.1", "spelhcp": 28 },
+                    { "handicapMin": "25.2", "handicapMax": "26.0", "spelhcp": 29 },
+                    { "handicapMin": "26.1", "handicapMax": "26.8", "spelhcp": 30 },
+                    { "handicapMin": "26.9", "handicapMax": "27.7", "spelhcp": 31 },
+                    { "handicapMin": "27.8", "handicapMax": "28.5", "spelhcp": 32 },
+                    { "handicapMin": "28.6", "handicapMax": "29.4", "spelhcp": 33 },
+                    { "handicapMin": "29.5", "handicapMax": "30.3", "spelhcp": 34 },
+                    { "handicapMin": "30.4", "handicapMax": "31.1", "spelhcp": 35 },
+                    { "handicapMin": "31.2", "handicapMax": "32.0", "spelhcp": 36 },
+                    { "handicapMin": "32.1", "handicapMax": "32.8", "spelhcp": 37 },
+                    { "handicapMin": "32.9", "handicapMax": "33.7", "spelhcp": 38 },
+                    { "handicapMin": "33.8", "handicapMax": "34.5", "spelhcp": 39 },
+                    { "handicapMin": "34.6", "handicapMax": "35.4", "spelhcp": 40 },
+                    { "handicapMin": "35.5", "handicapMax": "36.2", "spelhcp": 41 },
+                    { "handicapMin": "36.3", "handicapMax": "37.1", "spelhcp": 42 },
+                    { "handicapMin": "37.2", "handicapMax": "38.0", "spelhcp": 43 },
+                    { "handicapMin": "38.1", "handicapMax": "38.8", "spelhcp": 44 },
+                    { "handicapMin": "38.9", "handicapMax": "39.7", "spelhcp": 45 },
+                    { "handicapMin": "39.8", "handicapMax": "40.5", "spelhcp": 46 },
+                    { "handicapMin": "40.6", "handicapMax": "41.4", "spelhcp": 47 },
+                    { "handicapMin": "41.5", "handicapMax": "42.2", "spelhcp": 48 },
+                    { "handicapMin": "42.3", "handicapMax": "43.1", "spelhcp": 49 },
+                    { "handicapMin": "43.2", "handicapMax": "44.0", "spelhcp": 50 },
+                    { "handicapMin": "44.1", "handicapMax": "44.8", "spelhcp": 51 },
+                    { "handicapMin": "44.9", "handicapMax": "45.7", "spelhcp": 52 },
+                    { "handicapMin": "45.8", "handicapMax": "46.5", "spelhcp": 53 },
+                    { "handicapMin": "46.6", "handicapMax": "47.4", "spelhcp": 54 },
+                    { "handicapMin": "47.5", "handicapMax": "48.2", "spelhcp": 55 },
+                    { "handicapMin": "48.3", "handicapMax": "49.1", "spelhcp": 56 },
+                    { "handicapMin": "49.2", "handicapMax": "49.9", "spelhcp": 57 },
+                    { "handicapMin": "50.0", "handicapMax": "50.8", "spelhcp": 58 },
+                    { "handicapMin": "50.9", "handicapMax": "51.7", "spelhcp": 59 },
+                    { "handicapMin": "51.8", "handicapMax": "52.5", "spelhcp": 60 },
+                    { "handicapMin": "52.6", "handicapMax": "53.4", "spelhcp": 61 },
+                    { "handicapMin": "53.5", "handicapMax": "54.0", "spelhcp": 62 }
+                ]
+            },
+            "Röd": {
+                "courseRating": 64.8,
+                "slopeRating": 127,
+                "handicapIntervaller": [
+                    { "handicapMin": "+4.0", "handicapMax": "+3.9", "spelhcp": -8 },
+                    { "handicapMin": "+3.8", "handicapMax": "+3.0", "spelhcp": -7 },
+                    { "handicapMin": "+2.9", "handicapMax": "+2.1", "spelhcp": -6 },
+                    { "handicapMin": "+2.0", "handicapMax": "+1.2", "spelhcp": -5 },
+                    { "handicapMin": "+1.1", "handicapMax": "+0.3", "spelhcp": -4 },
+                    { "handicapMin": "+0.2", "handicapMax": "0.6", "spelhcp": -3 },
+                    { "handicapMin": "0.7", "handicapMax": "1.5", "spelhcp": -2 },
+                    { "handicapMin": "1.6", "handicapMax": "2.4", "spelhcp": -1 },
+                    { "handicapMin": "2.5", "handicapMax": "3.2", "spelhcp": 0 },
+                    { "handicapMin": "3.3", "handicapMax": "4.1", "spelhcp": 1 },
+                    { "handicapMin": "4.2", "handicapMax": "5.0", "spelhcp": 2 },
+                    { "handicapMin": "5.1", "handicapMax": "5.9", "spelhcp": 3 },
+                    { "handicapMin": "6.0", "handicapMax": "6.8", "spelhcp": 4 },
+                    { "handicapMin": "6.9", "handicapMax": "7.7", "spelhcp": 5 },
+                    { "handicapMin": "7.8", "handicapMax": "8.6", "spelhcp": 6 },
+                    { "handicapMin": "8.7", "handicapMax": "9.5", "spelhcp": 7 },
+                    { "handicapMin": "9.6", "handicapMax": "10.4", "spelhcp": 8 },
+                    { "handicapMin": "10.5", "handicapMax": "11.2", "spelhcp": 9 },
+                    { "handicapMin": "11.3", "handicapMax": "12.1", "spelhcp": 10 },
+                    { "handicapMin": "12.2", "handicapMax": "13.0", "spelhcp": 11 },
+                    { "handicapMin": "13.1", "handicapMax": "13.9", "spelhcp": 12 },
+                    { "handicapMin": "14.0", "handicapMax": "14.8", "spelhcp": 13 },
+                    { "handicapMin": "14.9", "handicapMax": "15.7", "spelhcp": 14 },
+                    { "handicapMin": "15.8", "handicapMax": "16.6", "spelhcp": 15 },
+                    { "handicapMin": "16.7", "handicapMax": "17.5", "spelhcp": 16 },
+                    { "handicapMin": "17.6", "handicapMax": "18.4", "spelhcp": 17 },
+                    { "handicapMin": "18.5", "handicapMax": "19.3", "spelhcp": 18 },
+                    { "handicapMin": "19.4", "handicapMax": "20.1", "spelhcp": 19 },
+                    { "handicapMin": "20.2", "handicapMax": "21.0", "spelhcp": 20 },
+                    { "handicapMin": "21.1", "handicapMax": "21.9", "spelhcp": 21 },
+                    { "handicapMin": "22.0", "handicapMax": "22.8", "spelhcp": 22 },
+                    { "handicapMin": "22.9", "handicapMax": "23.7", "spelhcp": 23 },
+                    { "handicapMin": "23.8", "handicapMax": "24.6", "spelhcp": 24 },
+                    { "handicapMin": "24.7", "handicapMax": "25.5", "spelhcp": 25 },
+                    { "handicapMin": "25.6", "handicapMax": "26.4", "spelhcp": 26 },
+                    { "handicapMin": "26.5", "handicapMax": "27.3", "spelhcp": 27 },
+                    { "handicapMin": "27.4", "handicapMax": "28.2", "spelhcp": 28 },
+                    { "handicapMin": "28.3", "handicapMax": "29.0", "spelhcp": 29 },
+                    { "handicapMin": "29.1", "handicapMax": "29.9", "spelhcp": 30 },
+                    { "handicapMin": "30.0", "handicapMax": "30.8", "spelhcp": 31 },
+                    { "handicapMin": "30.9", "handicapMax": "31.7", "spelhcp": 32 },
+                    { "handicapMin": "31.8", "handicapMax": "32.6", "spelhcp": 33 },
+                    { "handicapMin": "32.7", "handicapMax": "33.5", "spelhcp": 34 },
+                    { "handicapMin": "33.6", "handicapMax": "34.4", "spelhcp": 35 },
+                    { "handicapMin": "34.5", "handicapMax": "35.3", "spelhcp": 36 },
+                    { "handicapMin": "35.4", "handicapMax": "36.2", "spelhcp": 37 },
+                    { "handicapMin": "36.3", "handicapMax": "37.1", "spelhcp": 38 },
+                    { "handicapMin": "37.2", "handicapMax": "37.9", "spelhcp": 39 },
+                    { "handicapMin": "38.0", "handicapMax": "38.8", "spelhcp": 40 },
+                    { "handicapMin": "38.9", "handicapMax": "39.7", "spelhcp": 41 },
+                    { "handicapMin": "39.8", "handicapMax": "40.6", "spelhcp": 42 },
+                    { "handicapMin": "40.7", "handicapMax": "41.5", "spelhcp": 43 },
+                    { "handicapMin": "41.6", "handicapMax": "42.4", "spelhcp": 44 },
+                    { "handicapMin": "42.5", "handicapMax": "43.3", "spelhcp": 45 },
+                    { "handicapMin": "43.4", "handicapMax": "44.2", "spelhcp": 46 },
+                    { "handicapMin": "44.3", "handicapMax": "45.1", "spelhcp": 47 },
+                    { "handicapMin": "45.2", "handicapMax": "46.0", "spelhcp": 48 },
+                    { "handicapMin": "46.1", "handicapMax": "46.8", "spelhcp": 49 },
+                    { "handicapMin": "46.9", "handicapMax": "47.7", "spelhcp": 50 },
+                    { "handicapMin": "47.8", "handicapMax": "48.6", "spelhcp": 51 },
+                    { "handicapMin": "48.7", "handicapMax": "49.5", "spelhcp": 52 },
+                    { "handicapMin": "49.6", "handicapMax": "50.4", "spelhcp": 53 },
+                    { "handicapMin": "50.5", "handicapMax": "51.3", "spelhcp": 54 },
+                    { "handicapMin": "51.4", "handicapMax": "52.2", "spelhcp": 55 },
+                    { "handicapMin": "52.3", "handicapMax": "53.1", "spelhcp": 56 },
+                    { "handicapMin": "53.2", "handicapMax": "54.0", "spelhcp": 57 }
+                ]
+            }
+        };
 
+        // Statiska index för hål 1-9
+        const HOLE_INDEXES = {
+            1: 3,
+            2: 9,
+            3: 11,
+            4: 13,
+            5: 7,
+            6: 15,
+            7: 5,
+            8: 17,
+            9: 1
+        };
+
+        // Svårighetsrank för fördelning av HCP (1 = svårast, 9 = lättast bland dessa 9 hål)
+        const INDEX_RANKS = {
+            1: 1,  // Hål 9 (Svårast, Index 1)
+            3: 2,  // Hål 1 (Index 3)
+            5: 3,  // Hål 7 (Index 5)
+            7: 4,  // Hål 5 (Index 7)
+            9: 5,  // Hål 2 (Index 9)
+            11: 6, // Hål 3 (Index 11)
+            13: 7, // Hål 4 (Index 13)
+            15: 8, // Hål 6 (Index 15)
+            17: 9  // Hål 8 (Lättast, Index 17)
+        };
+
+        // Konfiguration för 9-hålsbanan med tillhörande par
+        const defaultHoles = [
+            { par: 4, index: HOLE_INDEXES[1], strokes: 0, putts: 0, fir: 'none' },
+            { par: 4, index: HOLE_INDEXES[2], strokes: 0, putts: 0, fir: 'none' },
+            { par: 5, index: HOLE_INDEXES[3], strokes: 0, putts: 0, fir: 'none' },
+            { par: 3, index: HOLE_INDEXES[4], strokes: 0, putts: 0, fir: 'none' },
+            { par: 4, index: HOLE_INDEXES[5], strokes: 0, putts: 0, fir: 'none' },
+            { par: 3, index: HOLE_INDEXES[6], strokes: 0, putts: 0, fir: 'none' },
+            { par: 4, index: HOLE_INDEXES[7], strokes: 0, putts: 0, fir: 'none' },
+            { par: 3, index: HOLE_INDEXES[8], strokes: 0, putts: 0, fir: 'none' },
+            { par: 4, index: HOLE_INDEXES[9], strokes: 0, putts: 0, fir: 'none' }
+        ];
+
+        // Initiera State från LocalStorage för sessionens aktuella pågående runda
+        let appState = {
+            playerName: localStorage.getItem('player_name') || "Spelare",
+            tee: localStorage.getItem('player_tee') || "Gul",
+            exactHcp: parseFloat(localStorage.getItem('player_exact_hcp')) || 18.4,
+            hcp: parseInt(localStorage.getItem('player_hcp')) || 18, 
+            currentHoleIdx: 0,
+            activeTab: 'play',
+            holes: JSON.parse(localStorage.getItem('golf_holes_v2')) || JSON.parse(JSON.stringify(defaultHoles))
+        };
+
+        // IndexedDB databasreferens
+        let db;
+        const DB_NAME = 'Golf9Database_v1';
+        const STORE_NAME = 'rounds';
+
+        // Initiera IndexedDB-databasen lokalt på mobil/dator
+        function initIndexedDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, 1);
+                
+                request.onerror = (e) => {
+                    console.error("IndexedDB fel:", e);
+                    reject(e);
+                };
+                
+                request.onsuccess = (e) => {
+                    db = e.target.result;
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (e) => {
+                    const databaseInstance = e.target.result;
+                    if (!databaseInstance.objectStoreNames.contains(STORE_NAME)) {
+                        databaseInstance.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                    }
+                };
+            });
+        }
+
+        // Hjälpmetod för att parsa handikapp-värden (hanterar plus-handikapp som "+1.2" till matematiskt -1.2)
+        function parseHcpValue(valStr) {
+            if (valStr.startsWith('+')) {
+                return -parseFloat(valStr.substring(1));
+            }
+            return parseFloat(valStr);
+        }
+
+        // Formaterar exakt handicap till golfstandard (visar + för plus-handicap)
+        function formatExactHcp(val) {
+            if (val < 0) {
+                return `+${Math.abs(val).toFixed(1)}`;
+            }
+            return val.toFixed(1);
+        }
+
+        // Räknar ut Spel-HCP baserat på slopetabell, vald tee och exakt handicap
+        function calculateSpelHcp(tee, exactHcp) {
+            const table = SLOPE_TABLE[tee];
+            if (!table) return 18; // Fallback
+            
+            const intervals = table.handicapIntervaller;
+            
+            // Loopa igenom intervallerna för att hitta träff
+            for (let i = 0; i < intervals.length; i++) {
+                const min = parseHcpValue(intervals[i].handicapMin);
+                const max = parseHcpValue(intervals[i].handicapMax);
+                
+                if (exactHcp >= min && exactHcp <= max) {
+                    return intervals[i].spelhcp;
+                }
+            }
+            
+            // Om utanför gränserna, returnera närmsta match
+            if (exactHcp < parseHcpValue(intervals[0].handicapMin)) {
+                return intervals[0].spelhcp;
+            }
+            return intervals[intervals.length - 1].spelhcp;
+        }
+
+        // Tvinga tillämpning av de statiska indexen och par-värdena i fall gamla data var sparade i webbläsaren
+        appState.holes.forEach((hole, idx) => {
+            hole.index = HOLE_INDEXES[idx + 1];
+            if (defaultHoles[idx]) {
+                hole.par = defaultHoles[idx].par;
+            }
+        });
+
+        // Spara session-state till LocalStorage och räkna om dynamiskt
+        function saveState() {
+            appState.hcp = calculateSpelHcp(appState.tee, appState.exactHcp);
+            
+            localStorage.setItem('golf_holes_v2', JSON.stringify(appState.holes));
+            localStorage.setItem('player_name', appState.playerName);
+            localStorage.setItem('player_tee', appState.tee);
+            localStorage.setItem('player_exact_hcp', appState.exactHcp);
+            localStorage.setItem('player_hcp', appState.hcp);
+            
+            updateUI();
+        }
+
+        // --- FLIK-NAVIGERING ---
+        function switchTab(tabId) {
+            appState.activeTab = tabId;
+            
+            // Uppdatera visning av sektioner
+            ['play', 'card', 'stats', 'settings'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                if (t === tabId) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            // Uppdatera navigeringsknapparnas stilar
+            ['play', 'card', 'stats', 'settings'].forEach(t => {
+                const btn = document.getElementById(`btn-tab-${t}`);
+                if (t === tabId) {
+                    btn.classList.add('active-tab');
+                    btn.classList.add('text-emerald-500');
+                    btn.classList.remove('text-slate-400');
+                } else {
+                    btn.classList.remove('active-tab');
+                    btn.classList.remove('text-emerald-500');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+
+            updateUI();
+            
+            // Om vi går till statistik, hämta rundor från IndexedDB på nytt
+            if (tabId === 'stats') {
+                loadAndRenderHistory();
+            }
+        }
+
+        // --- HÅL-REGLAGE & HÅL-VAL ---
+        function prevHole() {
+            if (appState.currentHoleIdx > 0) {
+                appState.currentHoleIdx--;
+                updateUI();
+            }
+        }
+
+        function nextHole() {
+            if (appState.currentHoleIdx < 8) {
+                appState.currentHoleIdx++;
+                updateUI();
+            }
+        }
+
+        function updateCurrentScore(type, delta) {
+            const hole = appState.holes[appState.currentHoleIdx];
+            
+            if (type === 'strokes') {
+                hole.strokes = Math.max(0, hole.strokes + delta);
+                // Skydda så att puttar inte är fler än slag
+                if (hole.strokes < hole.putts) {
+                    hole.putts = hole.strokes;
+                }
+            } else if (type === 'putts') {
+                hole.putts = Math.max(0, Math.min(hole.strokes, hole.putts + delta));
+            }
+            saveState();
+        }
+
+        function setFIR(status) {
+            const hole = appState.holes[appState.currentHoleIdx];
+            hole.fir = hole.fir === status ? 'none' : status;
+            saveState();
+        }
+
+        // --- SLOPE & INSTÄLLNINGAR REGLAGE ---
+        function setTee(teeName) {
+            appState.tee = teeName;
+            saveState();
+        }
+
+        function adjustExactHCP(delta) {
+            appState.exactHcp = Math.max(-4.0, Math.min(54.0, Math.round((appState.exactHcp + delta) * 10) / 10));
+            saveState();
+        }
+
+        function manualExactHCPChange(val) {
+            let num = parseFloat(val.replace('+', '-')); // Tillåt att skriva + framför plus-handicap
+            if (!isNaN(num)) {
+                appState.exactHcp = Math.max(-4.0, Math.min(54.0, num));
+            }
+            saveState();
+        }
+
+        function savePlayerSettings() {
+            const nameInput = document.getElementById('input-player-name');
+            appState.playerName = nameInput.value.trim() || "Spelare";
+            saveState();
+        }
+
+        // --- HJÄLPBERÄKNINGAR (GOLF-LOGIK) ---
+        
+        // Beräkna erhållna slag för ett visst hål baserat på spelarens HCP och hålets index
+        function getExtraStrokes(holeIndex, playerHcp) {
+            let extra = Math.floor(playerHcp / 9); // Bas-slag per hål för 9 hål
+            const remainder = playerHcp % 9;      // De återstående slag som ska fördelas på svåraste hålen
+            const rank = INDEX_RANKS[holeIndex];
+            if (rank && rank <= remainder) {
+                extra += 1;
+            }
+            return extra;
+        }
+
+        // Få golfterm (Birdie, Par, Bogey, etc.)
+        function getScoreBadgeDetails(strokes, par) {
+            if (strokes === 0) return { text: "Ej spelat", class: "bg-slate-800 text-slate-400" };
+            const diff = strokes - par;
+            switch(diff) {
+                case -3: return { text: "Albatross", class: "bg-amber-500 text-obsidian-950 font-black animate-pulse" };
+                case -2: return { text: "Eagle", class: "bg-yellow-400 text-obsidian-950 font-black" };
+                case -1: return { text: "Birdie", class: "bg-amber-100 text-emerald-800 font-bold" };
+                case 0: return { text: "Par", class: "bg-emerald-800/80 text-emerald-100 font-medium" };
+                case 1: return { text: "Bogey", class: "bg-rose-950 text-rose-300" };
+                case 2: return { text: "Dubbelbogey", class: "bg-red-950/80 text-red-400" };
+                default: 
+                    if(diff < -3) return { text: "Super!", class: "bg-amber-400 text-black font-black" };
+                    return { text: `+${diff}`, class: "bg-slate-900 text-slate-400" };
+            }
+        }
+
+        // Beräkna Green In Regulation (GIR)
+        function isGIR(hole) {
+            if (hole.strokes === 0) return false;
+            return (hole.strokes - hole.putts) <= (hole.par - 2);
+        }
+
+        // --- UI APPDATERINGS-MOTOR ---
+        function updateUI() {
+            const activeHole = appState.holes[appState.currentHoleIdx];
+            
+            // 1. Uppdatera Header & Spelarinfo
+            document.getElementById('header-player-info').innerText = `${appState.playerName} (${appState.tee} Tee • Spel-HCP: ${appState.hcp})`;
+            
+            // Räkna totaler
+            let totalPar = 0;
+            let totalStrokes = 0;
+            let totalPutts = 0;
+            let totalNetStrokes = 0;
+            let totalGIR = 0;
+            let playedHoles = 0;
+            let totalPoints = 0; 
+            let antaletPar4och5 = 0;
+
+            let firDistribution = { left: 0, hit: 0, right: 0 };
+
+            appState.holes.forEach(h => {
+                totalPar += h.par;
+                totalStrokes += h.strokes;
+                totalPutts += h.putts;
+                
+                if (h.strokes > 0) {
+                    playedHoles++;
+                    const extra = getExtraStrokes(h.index, appState.hcp);
+                    totalNetStrokes += (h.strokes - extra);
+                    
+                    // Poängbogey poäng-beräkning per hål
+                    const netStrokes = h.strokes - extra;
+                    const diff = netStrokes - h.par;
+                    const points = Math.max(0, 2 - diff);
+                    totalPoints += points;
+                    
+                    if (isGIR(h)) totalGIR++;
+
+                    if (h.par > 3) {
+                        antaletPar4och5++;
+                        if (h.fir === 'hit') {
+                            firDistribution.hit++;
+                        } else if (h.fir === 'left') {
+                            firDistribution.left++;
+                        } else if (h.fir === 'right') {
+                            firDistribution.right++;
+                        }
+                    }
+                }
+            });
+
+            const diffToPar = totalStrokes - totalPar;
+            const headerTotalDisplay = document.getElementById('header-total-display');
+            const headerPointsDisplay = document.getElementById('header-points-display');
+            if (totalStrokes === 0) {
+                headerTotalDisplay.innerText = `-- (Par ${totalPar})`;
+                headerTotalDisplay.className = "text-base font-mono font-black text-slate-400";
+                headerPointsDisplay.innerText = "-- poäng";
+            } else {
+                const prefix = diffToPar > 0 ? `+${diffToPar}` : (diffToPar === 0 ? "E" : diffToPar);
+                headerTotalDisplay.innerText = `${totalStrokes} (${prefix})`;
+                headerTotalDisplay.className = `text-base font-mono font-black ${diffToPar <= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+                headerPointsDisplay.innerText = `${totalPoints} poäng`;
+            }
+
+            // 2. Uppdatera Spela-fliken
+            document.getElementById('current-hole-num').innerText = appState.currentHoleIdx + 1;
+            document.getElementById('hole-par-display').innerText = activeHole.par;
+            document.getElementById('hole-index-display').innerText = activeHole.index;
+            document.getElementById('current-strokes').innerText = activeHole.strokes;
+            document.getElementById('current-putts').innerText = activeHole.putts;
+
+            // Badges på Spela-skärmen
+            const badgeDetails = getScoreBadgeDetails(activeHole.strokes, activeHole.par);
+            const scoreBadge = document.getElementById('score-name-badge');
+            scoreBadge.innerText = badgeDetails.text;
+            scoreBadge.className = `text-xs font-bold px-3 py-1 rounded-full transition-all ${badgeDetails.class}`;
+
+            const girBadge = document.getElementById('gir-badge');
+            if (activeHole.strokes > 0) {
+                if (isGIR(activeHole)) {
+                    girBadge.innerText = "🎯 GIR (Green in Regulation)";
+                    girBadge.className = "text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400";
+                } else {
+                    girBadge.innerText = "Missad GIR";
+                    girBadge.className = "text-xs font-bold px-3 py-1 rounded-full bg-slate-800 text-slate-500";
+                }
+            } else {
+                girBadge.innerText = "Väntar på slag";
+                girBadge.className = "text-xs font-bold px-3 py-1 rounded-full bg-slate-800 text-slate-500";
+            }
+
+            // Hantera Drive/FIR sektionens visning (visas ej på par 3)
+            const firSection = document.getElementById('fir-section');
+            if (activeHole.par === 3) {
+                firSection.classList.add('hidden');
+            } else {
+                firSection.classList.remove('hidden');
+                ['left', 'hit', 'right'].forEach(status => {
+                    const btn = document.getElementById(`fir-${status}`);
+                    if (activeHole.fir === status) {
+                        btn.className = "py-3 px-2 bg-emerald-500/10 border-emerald-500 rounded-xl flex flex-col items-center justify-center transition border text-white";
+                    } else {
+                        btn.className = "py-3 px-2 bg-slate-850 hover:bg-slate-800 border-transparent rounded-xl flex flex-col items-center justify-center transition border text-slate-400";
+                    }
+                });
+            }
+
+            // 3. Generera Scorekort Tabell
+            document.getElementById('scorecard-tee-badge').innerText = `${appState.tee} Tee • Spel-HCP: ${appState.hcp}`;
+            const tableBody = document.getElementById('scorecard-table-body');
+            tableBody.innerHTML = '';
+            appState.holes.forEach((h, index) => {
+                const extra = getExtraStrokes(h.index, appState.hcp);
+                const net = h.strokes > 0 ? (h.strokes - extra) : '-';
+                const points = h.strokes > 0 ? Math.max(0, 2 - ((h.strokes - extra) - h.par)) : '-';
+                const scoreDiff = h.strokes > 0 ? (h.strokes - h.par) : null;
+                
+                let strokeColor = "text-slate-300";
+                if (scoreDiff !== null) {
+                    if (scoreDiff < 0) strokeColor = "text-emerald-400 font-bold";
+                    if (scoreDiff > 0) strokeColor = "text-rose-400";
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = `border-b border-slate-800/50 hover:bg-slate-900/40 transition cursor-pointer ${index === appState.currentHoleIdx ? 'bg-emerald-500/5' : ''}`;
+                tr.innerHTML = `
+                    <td class="p-2 text-center font-bold ${index === appState.currentHoleIdx ? 'text-emerald-400' : 'text-slate-400'}">${index + 1}</td>
+                    <td class="p-2 text-center text-slate-400">${h.par}</td>
+                    <td class="p-2 text-center text-slate-500">${h.index}</td>
+                    <td class="p-2 text-center font-black ${strokeColor}">${h.strokes || '-'}</td>
+                    <td class="p-2 text-center text-blue-400">${h.putts || '-'}</td>
+                    <td class="p-2 text-center font-black text-white">${net}</td>
+                    <td class="p-2 text-center font-black text-amber-400">${points}</td>
+                `;
+                tr.onclick = () => {
+                    appState.currentHoleIdx = index;
+                    switchTab('play');
+                };
+                tableBody.appendChild(tr);
+            });
+
+            // 4. Uppdatera Statistiksida
+            document.getElementById('stat-gross').innerText = totalStrokes || '-';
+            const grossRel = document.getElementById('stat-gross-rel');
+            if (totalStrokes > 0) {
+                grossRel.innerText = diffToPar > 0 ? `+${diffToPar} mot par` : (diffToPar === 0 ? 'E (par)' : `${diffToPar} under par`);
+            } else {
+                grossRel.innerText = `Par ${totalPar}`;
+            }
+
+            document.getElementById('stat-net').innerText = totalStrokes > 0 ? totalNetStrokes : '-';
+            const netRel = document.getElementById('stat-net-rel');
+            if (totalStrokes > 0) {
+                const netDiff = totalNetStrokes - totalPar;
+                netRel.innerText = netDiff > 0 ? `+${netDiff} över spel-hcp` : (netDiff === 0 ? 'Exakt på spel-hcp' : `${netDiff} under spel-hcp`);
+            } else {
+                netRel.innerText = 'Spela hål för att se netto';
+            }
+
+            // Visa poäng i statistiken
+            document.getElementById('stat-points').innerText = totalStrokes > 0 ? totalPoints : '-';
+            const pointsRel = document.getElementById('stat-points-rel');
+            if (totalStrokes > 0) {
+                const pointsDiff = totalPoints - (playedHoles * 2);
+                if (pointsDiff > 0) {
+                    pointsRel.innerText = `+${pointsDiff}p bättre än HCP`;
+                    pointsRel.className = "text-[9px] text-emerald-400 font-semibold";
+                } else if (pointsDiff === 0) {
+                    pointsRel.innerText = "Exakt enligt ditt HCP";
+                    pointsRel.className = "text-[9px] text-slate-400";
+                } else {
+                    pointsRel.innerText = `${pointsDiff}p sämre än HCP`;
+                    pointsRel.className = "text-[9px] text-rose-400";
+                }
+            } else {
+                pointsRel.innerText = "18p är målet (HCP-par)";
+                pointsRel.className = "text-[9px] text-slate-400";
+            }
+
+            // GIR Progress Bar
+            const girPerc = playedHoles > 0 ? Math.round((totalGIR / playedHoles) * 100) : 0;
+            document.getElementById('stat-gir-perc').innerText = `${girPerc}%`;
+            document.getElementById('stat-gir-bar').style.width = `${girPerc}%`;
+
+            // Putt Snitt
+            document.getElementById('stat-putts-total').innerText = totalPutts;
+            const avgPutts = playedHoles > 0 ? (totalPutts / playedHoles).toFixed(1) : "0.0";
+            document.getElementById('stat-putts-avg').innerText = `${avgPutts} puttar per hål`;
+
+            // FIR Bar distribution
+            if (antaletPar4och5 > 0) {
+                const fLeft = Math.round((firDistribution.left / antaletPar4och5) * 100);
+                const fHit = Math.round((firDistribution.hit / antaletPar4och5) * 100);
+                const fRight = Math.round((firDistribution.right / antaletPar4och5) * 100);
+
+                const elL = document.getElementById('stat-fir-left');
+                const elH = document.getElementById('stat-fir-hit');
+                const elR = document.getElementById('stat-fir-right');
+
+                elL.style.width = `${fLeft || 10}%`; elL.innerText = `V ${fLeft}%`;
+                elH.style.width = `${fHit || 10}%`; elH.innerText = `🎯 ${fHit}%`;
+                elR.style.width = `${fRight || 10}%`; elR.innerText = `H ${fRight}%`;
+            }
+
+            // 5. Uppdatera Inställningsfliken
+            ['Vit', 'Gul', 'Röd'].forEach(t => {
+                const btn = document.getElementById(`tee-${t}`);
+                if (appState.tee === t) {
+                    btn.className = "py-2.5 px-2 rounded-xl border-2 border-emerald-500 text-center bg-emerald-500/10 text-white font-bold transition scale-105 shadow-md";
+                } else {
+                    btn.className = "py-2.5 px-2 rounded-xl border border-slate-850 text-center bg-slate-900/60 hover:bg-slate-800 text-slate-400 transition active:scale-95";
+                }
+            });
+
+            document.getElementById('input-player-name').value = appState.playerName;
+            document.getElementById('input-exact-hcp').value = formatExactHcp(appState.exactHcp);
+            document.getElementById('display-computed-spelhcp').innerText = appState.hcp;
+            document.getElementById('slope-calculation-text').innerText = `${appState.tee} Tee • Exakt HCP: ${formatExactHcp(appState.exactHcp)}`;
+
+            const hcpType = document.getElementById('display-hcp-type');
+            if (appState.exactHcp < 0) {
+                hcpType.innerText = "Plushandicap";
+                hcpType.className = "text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full font-mono border border-amber-500/20";
+            } else if (appState.exactHcp === 54.0) {
+                hcpType.innerText = "Grönt Kort (HCP 54)";
+                hcpType.className = "text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full font-mono border border-emerald-500/20";
+            } else {
+                hcpType.innerText = "Standard HCP";
+                hcpType.className = "text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full font-mono";
+            }
+        }
+
+        // --- SPAR-FLÖDE MED INDEXEDDB ---
+
+        // Försök spara runda med kontroll om alla 9 hål är ifyllda
+        function attemptSaveRound() {
+            let totalStrokes = appState.holes.reduce((sum, h) => sum + h.strokes, 0);
+            if (totalStrokes === 0) {
+                showToast("Du måste registrera minst ett slag!");
+                return;
+            }
+
+            // Kontrollera om alla hål har slag registrerade (>0)
+            let fullyPlayed = appState.holes.every(h => h.strokes > 0);
+            
+            if (fullyPlayed) {
+                saveRoundConfirmed();
+            } else {
+                // Öppna bekräftelsemodal för ofullständig runda
+                const modal = document.getElementById('save-confirm-modal');
+                const unplayedCount = appState.holes.filter(h => h.strokes === 0).length;
+                document.getElementById('save-confirm-text').innerText = `Du har inte fyllt i resultat för ${unplayedCount} av de 9 hålen. Vill du spara rundan som den är och påbörja ett nytt kort?`;
+                modal.classList.remove('pointer-events-none');
+                modal.classList.remove('opacity-0');
+            }
+        }
+
+        function closeSaveConfirmModal() {
+            const modal = document.getElementById('save-confirm-modal');
+            modal.classList.add('pointer-events-none');
+            modal.classList.add('opacity-0');
+        }
+
+        // Bekräftat sparande av runda i IndexedDB
+        function saveRoundConfirmed() {
+            closeSaveConfirmModal();
+
+            // Räkna ut metadata och sammanställning för rundan
+            let totalPar = 0;
+            let totalStrokes = 0;
+            let totalPutts = 0;
+            let totalPoints = 0;
+            let playedHoles = 0;
+
+            appState.holes.forEach(h => {
+                totalPar += h.par;
+                totalStrokes += h.strokes;
+                totalPutts += h.putts;
+                if (h.strokes > 0) {
+                    playedHoles++;
+                    const extra = getExtraStrokes(h.index, appState.hcp);
+                    const netStrokes = h.strokes - extra;
+                    totalPoints += Math.max(0, 2 - (netStrokes - h.par));
+                }
+            });
+
+            const roundId = Date.now().toString(); // Unikt ID baserat på timestamp
+            const dateStr = new Date().toLocaleDateString('sv-SE', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const roundToSave = {
+                id: roundId,
+                timestamp: Date.now(),
+                date: dateStr,
+                playerName: appState.playerName,
+                tee: appState.tee,
+                exactHcp: appState.exactHcp,
+                hcp: appState.hcp,
+                totalPar: totalPar,
+                totalStrokes: totalStrokes,
+                totalPutts: totalPutts,
+                totalPoints: totalPoints,
+                playedHolesCount: playedHoles,
+                holes: JSON.parse(JSON.stringify(appState.holes)) // Kopiera alla hål med detaljer
+            };
+
+            // Lägg till i IndexedDB
+            const transaction = db.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.add(roundToSave);
+
+            request.onsuccess = () => {
+                showToast("Rundan sparad i historiken!");
+                
+                // Nollställ det aktiva scorekortet för en ny session
+                appState.holes = JSON.parse(JSON.stringify(defaultHoles));
+                appState.currentHoleIdx = 0;
+                saveState();
+                
+                // Gå automatiskt till Statistik- och historikfliken
+                switchTab('stats');
+            };
+
+            request.onerror = (e) => {
+                console.error("Kunde inte spara till IndexedDB:", e);
+                showToast("Ett fel uppstod vid sparandet.");
+            };
+        }
+
+        // Hämta och rita upp sparade rundor från lokala databasen
+        function loadAndRenderHistory() {
+            const container = document.getElementById('history-container');
+            const countBadge = document.getElementById('history-count');
+            
+            if (!db) {
+                container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Laddar historik...</div>';
+                return;
+            }
+
+            const transaction = db.transaction([STORE_NAME], 'readonly');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.getAll();
+
+            request.onsuccess = (e) => {
+                const rounds = e.target.result || [];
+                countBadge.innerText = `${rounds.length} sparade`;
+
+                if (rounds.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-6 text-slate-500 text-xs">
+                            Inga sparade rundor i historiken än.<br>Spela 9 hål och klicka på "Spara Runda".
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Sortera rundorna med senaste överst
+                rounds.sort((a, b) => b.timestamp - a.timestamp);
+
+                container.innerHTML = '';
+                rounds.forEach(round => {
+                    const diff = round.totalStrokes - round.totalPar;
+                    const diffStr = diff > 0 ? `+${diff}` : (diff === 0 ? "E" : diff);
+                    
+                    // Skapa element
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2 transition hover:border-slate-700";
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start cursor-pointer" onclick="toggleHistoryCard('${round.id}')">
+                            <div>
+                                <div class="text-xs text-emerald-400 font-bold">${round.date}</div>
+                                <div class="text-sm font-extrabold text-white">${round.playerName}</div>
+                                <div class="text-[10px] text-slate-400">${round.tee} Tee • Spel-HCP: ${round.hcp} (HCP ${formatExactHcp(round.exactHcp)})</div>
+                            </div>
+                            <div class="flex items-center gap-3 text-right">
+                                <div>
+                                    <div class="text-lg font-mono font-black text-white">${round.totalStrokes} <span class="text-xs font-normal text-slate-400">slag</span></div>
+                                    <div class="text-xs font-bold text-amber-400 font-mono">${round.totalPoints} poäng</div>
+                                </div>
+                                <div class="text-slate-500 hover:text-white transition-colors duration-150 p-1" onclick="event.stopPropagation(); triggerDeleteRound('${round.id}')">
+                                    <span class="text-lg">🗑️</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Expanderbara detaljer (Scorekort för sparad runda) -->
+                        <div id="details-${round.id}" class="hidden pt-3 border-t border-slate-800 space-y-2">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 text-center">Spelade håldetaljer</div>
+                            <div class="grid grid-cols-5 gap-1 text-[10px] text-center font-bold text-slate-400 border-b border-slate-850 pb-1">
+                                <div>Hål</div>
+                                <div>Par</div>
+                                <div>Slag</div>
+                                <div>Putt</div>
+                                <div class="text-amber-400">Poäng</div>
+                            </div>
+                            <div class="space-y-1">
+                                ${round.holes.map((h, idx) => {
+                                    if (h.strokes === 0) return '';
+                                    const extra = getExtraStrokes(h.index, round.hcp);
+                                    const net = h.strokes - extra;
+                                    const pts = Math.max(0, 2 - (net - h.par));
+                                    let bgTerm = "text-slate-300";
+                                    if (h.strokes < h.par) bgTerm = "text-emerald-400 font-bold";
+                                    if (h.strokes > h.par) bgTerm = "text-rose-400";
+                                    return `
+                                        <div class="grid grid-cols-5 gap-1 text-[11px] text-center font-mono py-0.5 border-b border-slate-850/40">
+                                            <div class="font-bold text-slate-400">${idx + 1}</div>
+                                            <div class="text-slate-400">${h.par}</div>
+                                            <div class="${bgTerm}">${h.strokes}</div>
+                                            <div class="text-blue-400">${h.putts || '-'}</div>
+                                            <div class="text-amber-400 font-bold">${pts}p</div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                            <div class="text-[9px] text-slate-500 text-center pt-2">Klicka på rutan igen för att stänga detaljvyn</div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            };
+
+            request.onerror = (e) => {
+                container.innerHTML = '<div class="text-center py-6 text-rose-400 text-xs">Kunde inte läsa historik från IndexedDB.</div>';
+            };
+        }
+
+        // Expandera/stäng historik-kortet
+        function toggleHistoryCard(id) {
+            const el = document.getElementById(`details-${id}`);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Ta bort runda i IndexedDB med modal-verifiering
+        let roundToDeleteId = null;
+        function triggerDeleteRound(id) {
+            roundToDeleteId = id;
+            const modal = document.getElementById('delete-confirm-modal');
+            modal.classList.remove('pointer-events-none');
+            modal.classList.remove('opacity-0');
+            
+            // Koppla klick till raderingsfunktion
+            document.getElementById('delete-confirm-btn').onclick = () => {
+                if (roundToDeleteId) {
+                    const transaction = db.transaction([STORE_NAME], 'readwrite');
+                    const store = transaction.objectStore(STORE_NAME);
+                    const request = store.delete(roundToDeleteId);
+
+                    request.onsuccess = () => {
+                        showToast("Runda borttagen.");
+                        closeDeleteConfirmModal();
+                        loadAndRenderHistory(); // Rita om listan
+                    };
+                    request.onerror = () => {
+                        showToast("Kunde inte ta bort rundan.");
+                        closeDeleteConfirmModal();
+                    };
+                }
+            };
+        }
+
+        function closeDeleteConfirmModal() {
+            const modal = document.getElementById('delete-confirm-modal');
+            modal.classList.add('pointer-events-none');
+            modal.classList.add('opacity-0');
+            roundToDeleteId = null;
+        }
+
+        // --- EXPORT & DELNINGSFUNKTION ---
+        function shareRound() {
+            let totalPar = appState.holes.reduce((sum, h) => sum + h.par, 0);
+            let totalStrokes = appState.holes.reduce((sum, h) => sum + h.strokes, 0);
+            let totalPutts = appState.holes.reduce((sum, h) => sum + h.putts, 0);
+            
+            let totalPoints = 0;
+            appState.holes.forEach(h => {
+                if (h.strokes > 0) {
+                    const extra = getExtraStrokes(h.index, appState.hcp);
+                    const netStrokes = h.strokes - extra;
+                    totalPoints += Math.max(0, 2 - (netStrokes - h.par));
+                }
+            });
+
+            let diff = totalStrokes - totalPar;
+            let relString = diff > 0 ? `+${diff}` : (diff === 0 ? "E" : diff);
+
+            if (totalStrokes === 0) {
+                showToast("Du måste registrera slag först!");
+                return;
+            }
+
+            let text = `⛳ *Golf 9 Premium Scorekort - ${appState.playerName}* ⛳\n`;
+            text += `Spel-HCP: ${appState.hcp} (Tee: ${appState.tee}, Exakt HCP: ${formatExactHcp(appState.exactHcp)})\n`;
+            text += `Rapport: ${totalStrokes} slag (${relString}), ${totalPoints}p (Poängbogey) och ${totalPutts} puttar.\n\n`;
+            
+            appState.holes.forEach((h, i) => {
+                if(h.strokes > 0) {
+                    const extra = getExtraStrokes(h.index, appState.hcp);
+                    const netStrokes = h.strokes - extra;
+                    const pts = Math.max(0, 2 - (netStrokes - h.par));
+                    let scoreIcon = "⚪";
+                    if(h.strokes < h.par) scoreIcon = "🔥";
+                    if(h.strokes > h.par) scoreIcon = "⚠️";
+                    text += `Hål ${i+1}: ${h.strokes} slag (${pts}p, ${h.putts} puttar) ${scoreIcon}\n`;
+                }
+            });
+
+            text += `\nSkapad med Golf 9 Premium Caddie.`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Min golfrunda',
+                    text: text
+                }).catch(err => {
+                    console.log("Kunde inte dela: ", err);
+                });
+            } else {
+                // Fallback till urklipp
+                document.execCommand('copy'); 
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast("Rapport kopierad till urklipp!");
+                });
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.remove('opacity-0');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0');
+            }, 2200);
+        }
+
+        // --- NOLLSTÄLLNINGS-MODAL ---
+        function triggerResetModal() {
+            const modal = document.getElementById('reset-modal');
+            modal.classList.remove('pointer-events-none');
+            modal.classList.remove('opacity-0');
+        }
+
+        function closeResetModal() {
+            const modal = document.getElementById('reset-modal');
+            modal.classList.add('pointer-events-none');
+            modal.classList.add('opacity-0');
+        }
+
+        function resetGameConfirmed() {
+            appState.holes = JSON.parse(JSON.stringify(defaultHoles));
+            appState.currentHoleIdx = 0;
+            saveState();
+            closeResetModal();
+            showToast("Rundan har nollställts!");
+            switchTab('play');
+        }
+
+        // Initiering vid start
+        window.onload = () => {
+            // Sätt upp fönster och ladda gränssnitt
+            updateUI();
+            
+            // Starta IndexedDB-lagringen och hämta eventuell historik direkt
+            initIndexedDB().then(() => {
+                loadAndRenderHistory();
+            }).catch(err => {
+                console.error("IndexedDB kunde inte startas:", err);
+            });
+        };
+    </script>
+</body>
 </html>
